@@ -7,6 +7,7 @@ import br.com.fiap.card_management.domain.entities.CardEntity;
 import br.com.fiap.card_management.domain.exception.EntityException;
 import br.com.fiap.card_management.mock.CardEntityMock;
 import br.com.fiap.card_management.mock.CardModelMock;
+import br.com.fiap.card_management.mock.ClientMock;
 import br.com.fiap.card_management.ports.exception.OutputPortException;
 import br.com.fiap.card_management.ports.outputport.CardManagementOutputPort;
 import br.com.fiap.card_management.ports.outputport.ClientManagementOutputPort;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 import static br.com.fiap.card_management.utils.MessageEnumUtils.*;
@@ -57,7 +59,7 @@ class CardManagementOutputPortAdapterTest {
     //Arrange
     var cardModel = CardModelMock.get();
     var cardEntityId = 1L;
-    var client = new Object();
+    var client = ClientMock.get();
 
     when(cardRepository.save(any(CardModel.class))).thenReturn(cardModel);
 
@@ -80,7 +82,7 @@ class CardManagementOutputPortAdapterTest {
 
     //Arrange
     var cardEntity = CardEntityMock.get();
-    var client = new Object();
+    var client = ClientMock.get();
 
     when(cardRepository.save(any(CardModel.class))).thenThrow(EntityException.class);
 
@@ -93,7 +95,24 @@ class CardManagementOutputPortAdapterTest {
   }
 
   @Test
-  void shouldThrowOutputPortExceptionTryingCreateCard() {
+  void shouldThrowOutputPortExceptionTryingCreateCardNoClientFound() {
+
+    //Arrange
+    var cardEntity = CardEntityMock.get();
+    var client = new HashMap<>(ClientMock.get());
+
+    client.replace("cpf", "22222222");
+
+    when(clientManagementOutputPort.getClient(anyString())).thenReturn(client);
+
+    //Act & Assert
+    assertThatThrownBy(() -> cardManagementOutputPort.createCard(cardEntity))
+            .isInstanceOf(OutputPortException.class);
+
+  }
+
+  @Test
+  void shouldThrowOutputPortExceptionTryingCreateCardErrorToSaveCard() {
 
     //Arrange
     var cardEntity = CardEntityMock.get();

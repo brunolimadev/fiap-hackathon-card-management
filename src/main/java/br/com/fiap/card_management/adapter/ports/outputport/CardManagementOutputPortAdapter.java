@@ -8,6 +8,8 @@ import br.com.fiap.card_management.ports.outputport.CardManagementOutputPort;
 import br.com.fiap.card_management.ports.outputport.ClientManagementOutputPort;
 import br.com.fiap.card_management.utils.ConvertDomainEntityToJpaModelUtils;
 import br.com.fiap.card_management.utils.ConvertJpaModelToDomainEntityUtils;
+import com.google.gson.Gson;
+import org.json.JSONObject;
 
 import static br.com.fiap.card_management.utils.MessageEnumUtils.*;
 
@@ -30,7 +32,7 @@ public class CardManagementOutputPortAdapter implements CardManagementOutputPort
 
     try {
 
-      validateExistsClient(clientManagementOutputPort.getClient("CPF NUMBER"));
+      validateExistsClient(clientManagementOutputPort.getClient("CPF NUMBER"), cardEntity);
 
       var card = ConvertDomainEntityToJpaModelUtils.convert(cardEntity);
 
@@ -65,11 +67,15 @@ public class CardManagementOutputPortAdapter implements CardManagementOutputPort
 
   }
 
-  private void validateExistsClient(Object object) {
+  private void validateExistsClient(Object client, CardEntity cardEntity) {
 
-    if (object == null) {
+    var clientJsonString = new Gson().toJson(client);
+    var clientCpf = new JSONObject(clientJsonString)
+            .getString("cpf");
 
-      throw new OutputPortException("Cliente não encontrado");
+      if (client == null || (!cardEntity.getCpf().contentEquals(clientCpf))) {
+
+      throw new OutputPortException("Cliente nao encontrado");
 
     }
 

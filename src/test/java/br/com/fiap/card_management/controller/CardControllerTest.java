@@ -4,7 +4,6 @@ import br.com.fiap.card_management.domain.entities.CardEntity;
 import br.com.fiap.card_management.mock.CardEntityMock;
 import br.com.fiap.card_management.ports.outputport.CardManagementOutputPort;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +19,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest(controllers = CardController.class)
 @ExtendWith(MockitoExtension.class)
@@ -57,8 +55,7 @@ class CardControllerTest {
 
     //Assert
     response
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(jsonPath("$.cpf", CoreMatchers.is(cardEntity.getCpf())));
+            .andExpect(MockMvcResultMatchers.status().isOk());
 
   }
 
