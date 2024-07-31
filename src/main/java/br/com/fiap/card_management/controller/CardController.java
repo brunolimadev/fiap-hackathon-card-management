@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static br.com.fiap.card_management.utils.ValidateEntityValuesUtils.validateValues;
+
 
 @RestController
 @RequestMapping("cartao")
@@ -32,17 +34,15 @@ public class CardController {
           description = "No content return"
   )
   @PostMapping
-  public ResponseEntity<CardEntity> createCard(
-          @RequestBody CardEntity cardEntity
-  ) throws OutputPortException {
+  @ResponseStatus(HttpStatus.OK)
+  public void createCard(@RequestBody CardEntity cardEntity) throws OutputPortException {
 
-    return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(cardManagementOutputPort.createCard(cardEntity));
+    validateValues(cardEntity);
+    cardManagementOutputPort.createCard(cardEntity);
 
   }
 
-  @Operation(summary = "Returns a item by id")
+  @Operation(summary = "Returns a card by id")
   @ApiResponse(responseCode = "200", description = "Gets a specific card")
   @GetMapping(value = "{numero}")
   public ResponseEntity<CardEntity> getCard(

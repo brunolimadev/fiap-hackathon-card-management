@@ -5,6 +5,7 @@ import br.com.fiap.card_management.domain.exception.EntityException;
 import org.junit.jupiter.api.Test;
 
 import static br.com.fiap.card_management.utils.MessageEnumUtils.ENTITY_EXCEPTION;
+import static br.com.fiap.card_management.utils.ValidateEntityValuesUtils.validateValues;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -29,27 +30,32 @@ class CardEntityTest {
   @Test
   void shouldThrowEntityExceptionTryingCreateCardEntityWithNullCpf() {
 
-    assertThatThrownBy(() -> CardEntity
+    var cardEntity = CardEntity
             .builder()
             .limit(200.0)
             .number("**** **** **** 1234")
-            .build()
-    )
+            .build();
+
+    assertThatThrownBy(() -> validateValues(cardEntity))
             .isInstanceOf(EntityException.class)
             .hasMessage(ENTITY_EXCEPTION.getMessage());
 
   }
 
   @Test
-  void shouldThrowEntityExceptionTryingCreateCardEntityWithLimitZero() {
+  void shouldThrowEntityExceptionTryingCreateCardEntityWithNegativeLimit() {
 
-    assertThatThrownBy(() -> CardEntity
+    var cardEntity = CardEntity
             .builder()
+            .id(1L)
             .cpf("1111111111")
-            .limit(0.0)
+            .limit(-1000.0)
             .number("**** **** **** 1234")
-            .build()
-    )
+            .expiryDate("12/24")
+            .cvv("123")
+            .build();
+
+    assertThatThrownBy(() -> validateValues(cardEntity))
             .isInstanceOf(EntityException.class)
             .hasMessage(ENTITY_EXCEPTION.getMessage());
 

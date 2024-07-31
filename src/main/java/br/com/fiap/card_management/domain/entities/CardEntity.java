@@ -1,63 +1,29 @@
 package br.com.fiap.card_management.domain.entities;
 
-import br.com.fiap.card_management.domain.exception.EntityException;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.Hidden;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import static br.com.fiap.card_management.utils.MessageEnumUtils.ENTITY_EXCEPTION;
-
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Builder
 public class CardEntity {
 
   @Hidden
   private Long id;
+  @JsonProperty("cpf")
   private String cpf;
+  @JsonProperty("limite")
   private Double limit;
+  @JsonProperty("numero")
   private String number;
+  @JsonProperty("data_validade")
   private String expiryDate;
+  @JsonProperty("cvv")
   private String cvv;
-
-  public CardEntity(
-          Long id, String cpf, Double limit, String number,
-          String expiryDate, String cvv
-  ) {
-
-    validateValues(cpf, limit, number, expiryDate, cvv);
-
-    this.id = id;
-    this.cpf = cpf;
-    this.limit = limit;
-    this.number = number;
-    this.expiryDate = expiryDate;
-    this.cvv = cvv;
-
-  }
-
-  private void validateValues (
-          String cpf, Double limit, String number,
-          String expiryDate, String cvv
-  ) throws EntityException {
-
-    if (
-            cpf == null || limit == null || number == null
-                    || expiryDate == null || cvv == null
-    ) {
-
-      throw new EntityException(ENTITY_EXCEPTION.getMessage());
-
-    }
-
-    if (
-            cpf.isEmpty() || limit <= 0 || number.isEmpty()
-    ) {
-
-      throw new EntityException(ENTITY_EXCEPTION.getMessage());
-
-    }
-
-  }
-
 
 }
