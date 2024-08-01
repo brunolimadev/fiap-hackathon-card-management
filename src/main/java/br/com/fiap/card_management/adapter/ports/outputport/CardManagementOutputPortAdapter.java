@@ -1,8 +1,9 @@
 package br.com.fiap.card_management.adapter.ports.outputport;
 
 import br.com.fiap.card_management.adapter.repositories.CardRepository;
+import br.com.fiap.card_management.adapter.repositories.model.CardModel;
 import br.com.fiap.card_management.domain.entities.CardEntity;
-import br.com.fiap.card_management.domain.exception.EntityException;
+import br.com.fiap.card_management.domain.exception.*;
 import br.com.fiap.card_management.ports.exception.OutputPortException;
 import br.com.fiap.card_management.ports.outputport.CardManagementOutputPort;
 import br.com.fiap.card_management.ports.outputport.ClientManagementOutputPort;
@@ -33,6 +34,8 @@ public class CardManagementOutputPortAdapter implements CardManagementOutputPort
     try {
 
       validateExistsClient(clientManagementOutputPort.getClient("CPF NUMBER"), cardEntity);
+      validateCardsLimitByClient(cardRepository.countByCpf(cardEntity.getCpf()));
+      validateIfExistsCardNumber(cardRepository.findByNumber(cardEntity.getNumber()));
 
       var card = ConvertDomainEntityToJpaModelUtils.convert(cardEntity);
 
@@ -40,9 +43,9 @@ public class CardManagementOutputPortAdapter implements CardManagementOutputPort
               cardRepository.save(card)
       );
 
-    } catch (EntityException entityException) {
+    } catch (DomainException domainException) {
 
-      throw entityException;
+      throw domainException;
 
     } catch (Exception exception) {
 
@@ -75,7 +78,27 @@ public class CardManagementOutputPortAdapter implements CardManagementOutputPort
 
       if (client == null || (!cardEntity.getCpf().contentEquals(clientCpf))) {
 
-      throw new OutputPortException("Cliente nao encontrado");
+        throw new ClientNotFoundException("Cliente nao encontrado");
+
+    }
+
+  }
+
+  private void validateCardsLimitByClient(Long numberOfCards) {
+
+    if (numberOfCards >= 2) {
+
+      throw new CardLimitException("O cliente atingiu a quantidade máxima de cartoes permitida");
+
+    }
+
+  }
+
+  private void validateIfExistsCardNumber(CardModel cardModel) {
+
+    if (cardModel != null) {
+
+      throw new ExistingCardNumberException("Ja existe um cartao registrado com o numero informado");
 
     }
 

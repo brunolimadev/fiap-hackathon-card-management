@@ -4,6 +4,7 @@ import br.com.fiap.card_management.adapter.ports.outputport.CardManagementOutput
 import br.com.fiap.card_management.adapter.repositories.CardRepository;
 import br.com.fiap.card_management.adapter.repositories.model.CardModel;
 import br.com.fiap.card_management.domain.entities.CardEntity;
+import br.com.fiap.card_management.domain.exception.ClientNotFoundException;
 import br.com.fiap.card_management.domain.exception.EntityException;
 import br.com.fiap.card_management.mock.CardEntityMock;
 import br.com.fiap.card_management.mock.CardModelMock;
@@ -107,7 +108,7 @@ class CardManagementOutputPortAdapterTest {
 
     //Act & Assert
     assertThatThrownBy(() -> cardManagementOutputPort.createCard(cardEntity))
-            .isInstanceOf(OutputPortException.class);
+            .isInstanceOf(ClientNotFoundException.class);
 
   }
 
