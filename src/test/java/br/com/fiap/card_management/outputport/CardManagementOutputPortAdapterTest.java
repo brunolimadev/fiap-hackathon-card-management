@@ -21,13 +21,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.HashMap;
-import java.util.Optional;
 
 import static br.com.fiap.card_management.utils.MessageEnumUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 class CardManagementOutputPortAdapterTest {
@@ -169,24 +167,20 @@ class CardManagementOutputPortAdapterTest {
 
     //Arrange
     var cardModel = CardModelMock.get();
-    var cardEntity = CardEntityMock.get();
-    var cardEntityId = cardEntity.getId();
-    var client = new Object();
+    var cardNumber = CardEntityMock.get().getNumber();
 
-    when(cardRepository.findById(anyLong())).thenReturn(Optional.of(cardModel));
-
-    when(clientManagementOutputPort.getClient(anyString())).thenReturn(client);
+    when(cardRepository.findByNumber(anyString())).thenReturn(cardModel);
 
     //Act
-    var response = cardManagementOutputPort.getCard("12345678");
+    var response = cardManagementOutputPort.getCard(cardNumber);
 
     //Assert
     assertThat(response)
             .isNotNull()
             .isInstanceOf(CardEntity.class);
 
-    assertThat(response.getId()).isEqualTo(cardEntityId);
-    verify(cardRepository, times(1)).findById(anyLong());
+    assertThat(response.getId()).isEqualTo(cardModel.getId());
+    verify(cardRepository, times(1)).findByNumber(anyString());
 
   }
 
@@ -194,19 +188,15 @@ class CardManagementOutputPortAdapterTest {
   void shouldThrowOutputPortExceptionTryingGetCard() {
 
     //Arrange
-    var client = new Object();
-    var cardEntity = CardEntityMock.get();
-    var cardEntityId = cardEntity.getId();
+    var cardNumber = CardEntityMock.get().getNumber();
 
-    when(cardRepository.findById(anyLong())).thenThrow(RuntimeException.class);
-
-    when(clientManagementOutputPort.getClient(anyString())).thenReturn(client);
+    when(cardRepository.findByNumber(anyString())).thenThrow(RuntimeException.class);
 
     //Act & Assert
-    assertThatThrownBy(() -> cardManagementOutputPort.getCard("12345678"))
+    assertThatThrownBy(() -> cardManagementOutputPort.getCard(cardNumber))
             .isInstanceOf(OutputPortException.class)
             .hasMessage(ERROR_TO_GET_CARD.getMessage());
-    verify(cardRepository, times(1)).findById(anyLong());
+    verify(cardRepository, times(1)).findByNumber(anyString());
 
   }
 
