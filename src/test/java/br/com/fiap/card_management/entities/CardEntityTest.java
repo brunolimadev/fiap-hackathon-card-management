@@ -4,7 +4,7 @@ import br.com.fiap.card_management.domain.entities.CardEntity;
 import br.com.fiap.card_management.domain.exception.EntityException;
 import org.junit.jupiter.api.Test;
 
-import static br.com.fiap.card_management.utils.MessageEnumUtils.ENTITY_EXCEPTION;
+import static br.com.fiap.card_management.utils.MessageEnumUtils.*;
 import static br.com.fiap.card_management.utils.ValidateEntityValuesUtils.validateValues;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -38,7 +38,7 @@ class CardEntityTest {
 
     assertThatThrownBy(() -> validateValues(cardEntity))
             .isInstanceOf(EntityException.class)
-            .hasMessage(ENTITY_EXCEPTION.getMessage());
+            .hasMessage(MANDATORY_VALUES.getMessage());
 
   }
 
@@ -57,7 +57,7 @@ class CardEntityTest {
 
     assertThatThrownBy(() -> validateValues(cardEntity))
             .isInstanceOf(EntityException.class)
-            .hasMessage(ENTITY_EXCEPTION.getMessage());
+            .hasMessage(NEGATIVE_CARD_LIMIT.getMessage());
 
   }
 
@@ -86,11 +86,11 @@ class CardEntityTest {
 
     assertThatThrownBy(() -> validateValues(cardEntity1))
             .isInstanceOf(EntityException.class)
-            .hasMessage(ENTITY_EXCEPTION.getMessage());
+            .hasMessage(INVALID_CPF_LENGTH.getMessage());
 
     assertThatThrownBy(() -> validateValues(cardEntity2))
             .isInstanceOf(EntityException.class)
-            .hasMessage(ENTITY_EXCEPTION.getMessage());
+            .hasMessage(INVALID_CPF_NUMBER.getMessage());
 
   }
 

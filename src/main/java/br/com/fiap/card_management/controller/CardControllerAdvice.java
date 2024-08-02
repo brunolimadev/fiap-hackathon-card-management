@@ -1,8 +1,12 @@
 package br.com.fiap.card_management.controller;
 
 import br.com.fiap.card_management.domain.entities.MessageEntity;
-import br.com.fiap.card_management.domain.exception.DomainException;
+import br.com.fiap.card_management.domain.exception.CardLimitException;
+import br.com.fiap.card_management.domain.exception.ClientNotFoundException;
+import br.com.fiap.card_management.domain.exception.EntityException;
+import br.com.fiap.card_management.domain.exception.ExistingCardNumberException;
 import br.com.fiap.card_management.ports.exception.OutputPortException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MissingRequestHeaderException;
@@ -16,17 +20,17 @@ public class CardControllerAdvice {
 
   @ExceptionHandler(
           {
-                  DomainException.class
+                  CardLimitException.class
           }
   )
-  public ResponseEntity<MessageEntity> handleBadRequestWithDomainException(RuntimeException exception) {
+  public ResponseEntity<MessageEntity> handleForbiddenWithCardLimitException(RuntimeException exception) {
 
     return ResponseEntity
-            .badRequest()
+            .status(HttpStatus.FORBIDDEN)
             .body(
                     MessageEntity
                             .builder()
-                            .title(TIME_DOMAIN_EXCEPTION)
+                            .title(TIME_DOMAIN_ERROR)
                             .message(exception.getMessage())
                             .build()
             );
@@ -39,15 +43,15 @@ public class CardControllerAdvice {
                   MissingRequestHeaderException.class
           }
   )
-  public ResponseEntity<MessageEntity> handleBadRequestWithSpringException(Exception exception) {
+  public ResponseEntity<MessageEntity> handleInternalServerErrorWithSpringException(Exception exception) {
 
     return ResponseEntity
-            .badRequest()
+            .internalServerError()
             .body(
                     MessageEntity
                             .builder()
-                            .title(TITLE_DEFAULT_EXCEPTION)
-                            .message(MESSAGE_EMPTY_BODY_SPRING_EXCEPTION.getMessage())
+                            .title(TITLE_DEFAULT_ERROR)
+                            .message(NO_FORMAT_REQUEST.getMessage())
                             .build()
             );
 
@@ -58,14 +62,35 @@ public class CardControllerAdvice {
                   OutputPortException.class
           }
   )
-  public ResponseEntity<MessageEntity> handleUnProcessableEntity(RuntimeException exception) {
+  public ResponseEntity<MessageEntity> handleInternalServerErrorWithOutputPortException(RuntimeException exception) {
 
     return ResponseEntity
-            .unprocessableEntity()
+            .internalServerError()
             .body(
                     MessageEntity
                             .builder()
-                            .title(TITLE_PORTS_EXCEPTION)
+                            .title(TITLE_PORTS_ERROR)
+                            .message(exception.getMessage())
+                            .build()
+            );
+
+  }
+
+  @ExceptionHandler(
+          {
+                  ClientNotFoundException.class,
+                  ExistingCardNumberException.class,
+                  EntityException.class
+          }
+  )
+  public ResponseEntity<MessageEntity> handleInternalServerErrorWithOtherDomainError(RuntimeException exception) {
+
+    return ResponseEntity
+            .internalServerError()
+            .body(
+                    MessageEntity
+                            .builder()
+                            .title(TIME_DOMAIN_ERROR)
                             .message(exception.getMessage())
                             .build()
             );

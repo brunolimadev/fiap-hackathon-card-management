@@ -4,7 +4,7 @@ import br.com.fiap.card_management.domain.entities.CardEntity;
 import br.com.fiap.card_management.domain.exception.EntityException;
 import lombok.experimental.UtilityClass;
 
-import static br.com.fiap.card_management.utils.MessageEnumUtils.ENTITY_EXCEPTION;
+import static br.com.fiap.card_management.utils.MessageEnumUtils.*;
 
 @UtilityClass
 public class ValidateEntityValuesUtils {
@@ -13,6 +13,7 @@ public class ValidateEntityValuesUtils {
 
     validateNullValues(cardEntity);
     validateMandatoryValues(cardEntity);
+    validateCardLimit(cardEntity.getLimit());
     validateCpf(cardEntity.getCpf());
 
   }
@@ -27,7 +28,7 @@ public class ValidateEntityValuesUtils {
                     || cardEntity.getCvv() == null
     ) {
 
-      throw new EntityException(ENTITY_EXCEPTION.getMessage());
+      throw new EntityException(MANDATORY_VALUES.getMessage());
 
     }
 
@@ -38,11 +39,22 @@ public class ValidateEntityValuesUtils {
 
     if (
             cardEntity.getCpf().isEmpty()
-                    || cardEntity.getLimit() < 0
                     || cardEntity.getNumber().isEmpty()
+                    || cardEntity.getExpiryDate().isEmpty()
+                    || cardEntity.getCvv().isEmpty()
     ) {
 
-      throw new EntityException(ENTITY_EXCEPTION.getMessage());
+      throw new EntityException(MANDATORY_VALUES.getMessage());
+
+    }
+
+  }
+
+  private void validateCardLimit(Double limit) {
+
+    if (limit < 0) {
+
+      throw new EntityException(NEGATIVE_CARD_LIMIT.getMessage());
 
     }
 
@@ -50,15 +62,17 @@ public class ValidateEntityValuesUtils {
 
   private void validateCpf(String cpf) {
 
-    if ((!cpf.matches("[0-9]+"))) {
+    var regex = "[0-9]+";
 
-      throw new EntityException(ENTITY_EXCEPTION.getMessage());
+    if ((!cpf.matches(regex))) {
+
+      throw new EntityException(INVALID_CPF_NUMBER.getMessage());
 
     }
 
-    if (cpf.matches("[0-9]+") && cpf.length() != 11) {
+    if (cpf.matches(regex) && cpf.length() != 11) {
 
-      throw new EntityException(ENTITY_EXCEPTION.getMessage());
+      throw new EntityException(INVALID_CPF_LENGTH.getMessage());
 
     }
 
