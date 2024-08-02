@@ -28,12 +28,29 @@ class CardEntityTest {
   }
 
   @Test
-  void shouldThrowEntityExceptionTryingCreateCardEntityWithNullCpf() {
+  void shouldThrowEntityExceptionTryingCreateCardEntityWithEmptyMandatoryValues() {
 
     var cardEntity = CardEntity
             .builder()
-            .limit(200.0)
-            .number("**** **** **** 1234")
+            .id(1L)
+            .cpf("")
+            .limit(0.0)
+            .number("")
+            .expiryDate("")
+            .cvv("")
+            .build();
+
+    assertThatThrownBy(() -> validateValues(cardEntity))
+            .isInstanceOf(EntityException.class)
+            .hasMessage(MANDATORY_VALUES.getMessage());
+
+  }
+
+  @Test
+  void shouldThrowEntityExceptionTryingCreateCardEntityWithNullMandatoryValues() {
+
+    var cardEntity = CardEntity
+            .builder()
             .build();
 
     assertThatThrownBy(() -> validateValues(cardEntity))

@@ -60,7 +60,7 @@ public class CardManagementOutputPortAdapter implements CardManagementOutputPort
 
     try {
 
-      return ConvertJpaModelToDomainEntityUtils.convert(cardRepository.findById(Long.parseLong(number)).orElseThrow());
+      return ConvertJpaModelToDomainEntityUtils.convert(cardRepository.findByNumber(number));
 
     } catch (Exception exception) {
 
