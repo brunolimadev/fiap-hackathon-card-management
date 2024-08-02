@@ -42,7 +42,7 @@
 - http://localhost:8083/api/swagger-ui/index.html#/
 
 ## 😎 Collection
-- [fiap-hackaton-card-management.postman_collection.zip](https://github.com/brunolimadev/fiap-hackathon-card-management/blob/develop/api-test-files/fiap-hackaton-card-management.postman_collection.zip?raw=true)
+- [fiap-hackaton-card-management.postman_collection.zip](https://github.com/brunolimadev/fiap-hackathon-card-management/blob/d13554927e7c9e7439b213f7d408d8d4d7ac40b5/api-test-files/fiap-hackaton-card-management.postman_collection.zip?raw=true)
   - **Obs.:** para utilizar a coleção primeiro é preciso descompactar o arquivo e importá-lo no Postman
 
 ## ⭐ Squad
