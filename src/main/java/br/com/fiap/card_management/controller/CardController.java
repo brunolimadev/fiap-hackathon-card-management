@@ -42,7 +42,7 @@ public class CardController {
 
   }
 
-  @Operation(summary = "Returns a card by id")
+  @Operation(summary = "Returns a card by number")
   @ApiResponse(responseCode = "200", description = "Gets a specific card")
   @GetMapping(value = "{numero}")
   public ResponseEntity<CardEntity> getCard(
