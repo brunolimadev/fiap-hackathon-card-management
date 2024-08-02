@@ -9,7 +9,7 @@ public class CardEntityMock {
     return CardEntity
             .builder()
             .id(1L)
-            .cpf("1111111111")
+            .cpf("11111111111")
             .limit(1000.0)
             .number("**** **** **** 1234")
             .expiryDate("12/24")

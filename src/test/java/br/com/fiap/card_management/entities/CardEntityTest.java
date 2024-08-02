@@ -17,7 +17,7 @@ class CardEntityTest {
     assertThatNoException().isThrownBy(() -> CardEntity
             .builder()
             .id(1L)
-            .cpf("1111111111")
+            .cpf("11111111111")
             .limit(1000.0)
             .number("**** **** **** 1234")
             .expiryDate("12/24")
@@ -48,7 +48,7 @@ class CardEntityTest {
     var cardEntity = CardEntity
             .builder()
             .id(1L)
-            .cpf("1111111111")
+            .cpf("11111111111")
             .limit(-1000.0)
             .number("**** **** **** 1234")
             .expiryDate("12/24")
@@ -56,6 +56,39 @@ class CardEntityTest {
             .build();
 
     assertThatThrownBy(() -> validateValues(cardEntity))
+            .isInstanceOf(EntityException.class)
+            .hasMessage(ENTITY_EXCEPTION.getMessage());
+
+  }
+
+  @Test
+  void shouldThrowEntityExceptionTryingCreateCardEntityWithInvalidCpf() {
+
+    var cardEntity1 = CardEntity
+            .builder()
+            .id(1L)
+            .cpf("1111111111")
+            .limit(1000.0)
+            .number("**** **** **** 1234")
+            .expiryDate("12/24")
+            .cvv("123")
+            .build();
+
+    var cardEntity2 = CardEntity
+            .builder()
+            .id(1L)
+            .cpf("cpf invalido")
+            .limit(1000.0)
+            .number("**** **** **** 1234")
+            .expiryDate("12/24")
+            .cvv("123")
+            .build();
+
+    assertThatThrownBy(() -> validateValues(cardEntity1))
+            .isInstanceOf(EntityException.class)
+            .hasMessage(ENTITY_EXCEPTION.getMessage());
+
+    assertThatThrownBy(() -> validateValues(cardEntity2))
             .isInstanceOf(EntityException.class)
             .hasMessage(ENTITY_EXCEPTION.getMessage());
 
