@@ -49,7 +49,7 @@ public class CardManagementOutputPortAdapter implements CardManagementOutputPort
 
     } catch (Exception exception) {
 
-      throw new OutputPortException(CARD_MANAGEMENT_CREATE_CARD_OUTPUT_PORT_EXCEPTION.getMessage());
+      throw new OutputPortException(ERROR_TO_CREATE_CARD.getMessage());
 
     }
 
@@ -64,7 +64,7 @@ public class CardManagementOutputPortAdapter implements CardManagementOutputPort
 
     } catch (Exception exception) {
 
-      throw new OutputPortException(CARD_MANAGEMENT_GET_CARD_OUTPUT_PORT_EXCEPTION.getMessage());
+      throw new OutputPortException(ERROR_TO_GET_CARD.getMessage());
 
     }
 
@@ -78,7 +78,7 @@ public class CardManagementOutputPortAdapter implements CardManagementOutputPort
 
       if (client == null || (!cardEntity.getCpf().contentEquals(clientCpf))) {
 
-        throw new ClientNotFoundException("Cliente nao encontrado");
+        throw new ClientNotFoundException(CLIENT_NOT_FOUND.getMessage());
 
     }
 
@@ -88,7 +88,7 @@ public class CardManagementOutputPortAdapter implements CardManagementOutputPort
 
     if (numberOfCards >= 2) {
 
-      throw new CardLimitException("O cliente atingiu a quantidade máxima de cartoes permitida");
+      throw new CardLimitException(CARD_LIMIT_REACHED.getMessage());
 
     }
 
@@ -98,7 +98,7 @@ public class CardManagementOutputPortAdapter implements CardManagementOutputPort
 
     if (cardModel != null) {
 
-      throw new ExistingCardNumberException("Ja existe um cartao registrado com o numero informado");
+      throw new ExistingCardNumberException(EXISTING_CARD_NUMBER.getMessage());
 
     }
 

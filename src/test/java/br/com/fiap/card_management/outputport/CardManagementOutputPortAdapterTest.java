@@ -160,7 +160,7 @@ class CardManagementOutputPortAdapterTest {
     //Act & Assert
     assertThatThrownBy(() -> cardManagementOutputPort.createCard(cardEntity))
             .isInstanceOf(OutputPortException.class)
-            .hasMessage(CARD_MANAGEMENT_CREATE_CARD_OUTPUT_PORT_EXCEPTION.getMessage());
+            .hasMessage(ERROR_TO_CREATE_CARD.getMessage());
 
   }
 
@@ -205,7 +205,7 @@ class CardManagementOutputPortAdapterTest {
     //Act & Assert
     assertThatThrownBy(() -> cardManagementOutputPort.getCard("12345678"))
             .isInstanceOf(OutputPortException.class)
-            .hasMessage(CARD_MANAGEMENT_GET_CARD_OUTPUT_PORT_EXCEPTION.getMessage());
+            .hasMessage(ERROR_TO_GET_CARD.getMessage());
     verify(cardRepository, times(1)).findById(anyLong());
 
   }

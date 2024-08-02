@@ -9,14 +9,20 @@ import lombok.NoArgsConstructor;
 @Getter
 public enum MessageEnumUtils {
 
-  CARD_MANAGEMENT_CREATE_CARD_OUTPUT_PORT_EXCEPTION("Ocorreu um erro ao tentar criar o cartao"),
-  CARD_MANAGEMENT_GET_CARD_OUTPUT_PORT_EXCEPTION("Ocorreu um erro ao tentar recuperar o cartao"),
-  ENTITY_EXCEPTION("Por favor preencha todos os campos"),
-  MESSAGE_EMPTY_BODY_SPRING_EXCEPTION("Por favor insira valores validos");
+  ERROR_TO_CREATE_CARD("Ocorreu um erro ao tentar criar o cartao"),
+  ERROR_TO_GET_CARD("Ocorreu um erro ao tentar recuperar o cartao"),
+  MANDATORY_VALUES("Por favor preencha todos os campos"),
+  NO_FORMAT_REQUEST("Por favor insira valores validos"),
+  CLIENT_NOT_FOUND("Cliente nao encontrado"),
+  CARD_LIMIT_REACHED("O cliente atingiu a quantidade maxima de cartoes permitida"),
+  EXISTING_CARD_NUMBER("Ja existe um cartao registrado com o numero informado"),
+  NEGATIVE_CARD_LIMIT("O limite do cartao nao pode ser negativo"),
+  INVALID_CPF_NUMBER("Por favor insira um numero de CPF valido"),
+  INVALID_CPF_LENGTH("Tamanho de CPF invalido (O CPF deve conter no maximo 11 caracteres)");
 
-  public static final String TIME_DOMAIN_EXCEPTION = "Erro de negocio";
-  public static final String TITLE_PORTS_EXCEPTION =  "Erro de comunicacao";
-  public static final String TITLE_DEFAULT_EXCEPTION =  "Erro";
+  public static final String TIME_DOMAIN_ERROR = "Erro de negocio";
+  public static final String TITLE_PORTS_ERROR =  "Erro de comunicacao";
+  public static final String TITLE_DEFAULT_ERROR =  "Erro";
 
   private String message;
 
