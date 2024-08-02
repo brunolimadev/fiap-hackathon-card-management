@@ -4,7 +4,10 @@ import br.com.fiap.card_management.adapter.ports.outputport.CardManagementOutput
 import br.com.fiap.card_management.adapter.repositories.CardRepository;
 import br.com.fiap.card_management.adapter.repositories.model.CardModel;
 import br.com.fiap.card_management.domain.entities.CardEntity;
+import br.com.fiap.card_management.domain.exception.CardLimitException;
+import br.com.fiap.card_management.domain.exception.ClientNotFoundException;
 import br.com.fiap.card_management.domain.exception.EntityException;
+import br.com.fiap.card_management.domain.exception.ExistingCardNumberException;
 import br.com.fiap.card_management.mock.CardEntityMock;
 import br.com.fiap.card_management.mock.CardModelMock;
 import br.com.fiap.card_management.mock.ClientMock;
@@ -95,19 +98,54 @@ class CardManagementOutputPortAdapterTest {
   }
 
   @Test
-  void shouldThrowOutputPortExceptionTryingCreateCardNoClientFound() {
+  void shouldThrowClientNotFoundExceptionTryingCreateCard() {
 
     //Arrange
     var cardEntity = CardEntityMock.get();
     var client = new HashMap<>(ClientMock.get());
 
-    client.replace("cpf", "22222222");
+    client.replace("cpf", "22222222222");
 
     when(clientManagementOutputPort.getClient(anyString())).thenReturn(client);
 
     //Act & Assert
     assertThatThrownBy(() -> cardManagementOutputPort.createCard(cardEntity))
-            .isInstanceOf(OutputPortException.class);
+            .isInstanceOf(ClientNotFoundException.class);
+
+  }
+
+  @Test
+  void shouldThrowCardLimitExceptionTryingCreateCard() {
+
+    //Arrange
+    var cardEntity = CardEntityMock.get();
+    var client = new HashMap<>(ClientMock.get());
+
+    when(cardRepository.countByCpf(anyString())).thenReturn(2L);
+
+    when(clientManagementOutputPort.getClient(anyString())).thenReturn(client);
+
+    //Act & Assert
+    assertThatThrownBy(() -> cardManagementOutputPort.createCard(cardEntity))
+            .isInstanceOf(CardLimitException.class);
+
+  }
+
+  @Test
+  void shouldThrowExistingCardNumberExceptionTryingCreateCard() {
+
+    //Arrange
+    var cardEntity = CardEntityMock.get();
+    var cartModel = CardModelMock.get();
+    var client = new HashMap<>(ClientMock.get());
+
+    when(cardRepository.findByNumber(anyString())).thenReturn(cartModel);
+
+    when(clientManagementOutputPort.getClient(anyString())).thenReturn(client);
+
+    //Act & Assert
+    assertThatThrownBy(() -> cardManagementOutputPort.createCard(cardEntity))
+            .isInstanceOf(ExistingCardNumberException.class);
 
   }
 

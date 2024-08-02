@@ -1,7 +1,7 @@
 package br.com.fiap.card_management.controller;
 
 import br.com.fiap.card_management.domain.entities.MessageEntity;
-import br.com.fiap.card_management.domain.exception.EntityException;
+import br.com.fiap.card_management.domain.exception.DomainException;
 import br.com.fiap.card_management.ports.exception.OutputPortException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -16,7 +16,7 @@ public class CardControllerAdvice {
 
   @ExceptionHandler(
           {
-                  EntityException.class
+                  DomainException.class
           }
   )
   public ResponseEntity<MessageEntity> handleBadRequestWithDomainException(RuntimeException exception) {
