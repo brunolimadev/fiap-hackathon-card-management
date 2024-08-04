@@ -20,8 +20,8 @@ public class CardManagementOutputPortAdapter implements CardManagementOutputPort
   private final ClientManagementOutputPort clientManagementOutputPort;
 
   public CardManagementOutputPortAdapter(
-          CardRepository cardRepository,
-          ClientManagementOutputPort clientManagementOutputPort) {
+      CardRepository cardRepository,
+      ClientManagementOutputPort clientManagementOutputPort) {
 
     this.cardRepository = cardRepository;
     this.clientManagementOutputPort = clientManagementOutputPort;
@@ -33,15 +33,14 @@ public class CardManagementOutputPortAdapter implements CardManagementOutputPort
 
     try {
 
-      validateExistsClient(clientManagementOutputPort.getClient("CPF NUMBER"), cardEntity);
+      validateExistsClient(clientManagementOutputPort.getClient(cardEntity.getCpf()), cardEntity);
       validateCardsLimitByClient(cardRepository.countByCpf(cardEntity.getCpf()));
       validateIfExistsCardNumber(cardRepository.findByNumber(cardEntity.getNumber()));
 
       var card = ConvertDomainEntityToJpaModelUtils.convert(cardEntity);
 
       return ConvertJpaModelToDomainEntityUtils.convert(
-              cardRepository.save(card)
-      );
+          cardRepository.save(card));
 
     } catch (DomainException domainException) {
 
@@ -74,11 +73,11 @@ public class CardManagementOutputPortAdapter implements CardManagementOutputPort
 
     var clientJsonString = new Gson().toJson(client);
     var clientCpf = new JSONObject(clientJsonString)
-            .getString("cpf");
+        .getString("cpf");
 
-      if (client == null || (!cardEntity.getCpf().contentEquals(clientCpf))) {
+    if (client == null || (!cardEntity.getCpf().contentEquals(clientCpf))) {
 
-        throw new ClientNotFoundException(CLIENT_NOT_FOUND.getMessage());
+      throw new ClientNotFoundException(CLIENT_NOT_FOUND.getMessage());
 
     }
 

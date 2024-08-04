@@ -19,7 +19,7 @@ public class CardModel {
   @Column(name = "cpf")
   private String cpf;
 
-  @Column(name = "limit")
+  @Column(name = "card_limit")
   private Double limit;
 
   @Column(name = "number")
