@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.com.fiap</groupId>
 	<artifactId>card-management</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>card-management</name>
 	<description>Microservice responsible to create a card and get card by number.</description>
 	<url/>
