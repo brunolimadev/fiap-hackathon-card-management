@@ -21,7 +21,7 @@ COPY --from=build /usr/src/app/target/*.jar /usr/app/app.jar
 # Definimos o diretório de trabalho
 WORKDIR /usr/app
 
-# Expondo a porta 8081
+# Expondo a porta 8083
 EXPOSE 8083
 
 # Executamos o JAR
