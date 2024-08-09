@@ -19,3 +19,6 @@ spring:
                   lob:
                       # used to store large objects
                       non_contextual_creation: true
+
+client-management:
+  base-url: ${CLIENT_MS_HOST:http://localhost:8082}

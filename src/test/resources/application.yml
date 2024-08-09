@@ -22,3 +22,6 @@ spring:
       path: /h2-console
       settings.trace: true
       settings.web-allow-others: false
+
+client-management:
+  base-url: ${CLIENT_MS_HOST:http://localhost:8082}
